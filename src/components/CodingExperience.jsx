@@ -1,6 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router";
 import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 const CodingExperience = () => {
   const codeRef = useRef(null);
   const cursorRef = useRef(null);
@@ -16,40 +17,42 @@ const CodingExperience = () => {
 
 IntrodureSelf()`;
 
-  useEffect(() => {
-    if (hasTyped.current) return;
-    hasTyped.current = true;
+  useGSAP(
+    () => {
+      if (hasTyped.current) return;
+      hasTyped.current = true;
 
-    const codeElement = codeRef.current;
-    const cursorElement = cursorRef.current;
-    const containerElement = containerRef.current;
-    codeElement.innerHTML = "";
+      const codeElement = codeRef.current;
+      const cursorElement = cursorRef.current;
+      codeElement.innerHTML = "";
 
-    let index = 0;
+      let index = 0;
 
-    function type() {
-      if (index < codeString.length) {
-        const char = codeString[index];
-        codeElement.innerHTML +=
-          char === "\n" ? "<br>" : char === " " ? "&nbsp;" : char;
-        index++;
-        setTimeout(type, 18);
-      } else {
-        const blink = gsap.to(cursorElement, {
-          duration: 0.5,
-          opacity: 0,
-          repeat: -1,
-          yoyo: true,
-        });
-        setTimeout(() => {
-          blink.kill();
-          cursorElement.style.display = "none";
-          navigate("/main-page");
-        }, 3000);
+      function type() {
+        if (index < codeString.length) {
+          const char = codeString[index];
+          codeElement.innerHTML +=
+            char === "\n" ? "<br>" : char === " " ? "&nbsp;" : char;
+          index++;
+          setTimeout(type, 51);
+        } else {
+          const blink = gsap.to(cursorElement, {
+            duration: 0.5,
+            opacity: 0,
+            repeat: -1,
+            yoyo: true,
+          });
+          setTimeout(() => {
+            blink.kill();
+            cursorElement.style.display = "none";
+            navigate("/main-page");
+          }, 3000);
+        }
       }
-    }
-    type();
-  }, []);
+      type();
+    },
+    { scope: containerRef }
+  );
 
   return (
     <div

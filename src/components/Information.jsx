@@ -2,12 +2,16 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import ScrambleText from "./ScrambleText";
-import { SplitText } from "gsap/all";
+import { CustomEase, SplitText } from "gsap/all";
 
 function Information() {
   const containerRef = useRef(null);
   const mainContentRef = useRef(null);
   const welcomeTextRef = useRef(null);
+  CustomEase.create(
+    "easeCurve",
+    "M0,0 C0.126,0.382 0.519,0.314 0.641,0.52 0.701,0.622 0.818,1.001 1,1 "
+  );
   useGSAP(
     () => {
       const containerElement = containerRef.current;
@@ -20,12 +24,12 @@ function Information() {
         .to(containerElement, {
           duration: 1,
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          ease: "power3.inOut",
+          ease: "easeCurve",
         })
         .to(mainContentRef.current, {
           opacity: 1,
-          duration: 2,
-          ease: "sine.in",
+          duration: 1,
+          ease: "easeCurve",
         });
     },
     { scope: containerRef }
@@ -33,15 +37,14 @@ function Information() {
   useGSAP(
     () => {
       if (!welcomeTextRef) return;
-      gsap.set(welcomeTextRef.current, {
-        opacity: 0,
-        clipPath: "polygon(51% 0, 51% 0%, 51% 100%, 51% 100%)",
+      const splitText = SplitText.create(welcomeTextRef.current, {
+        type: "chars",
       });
-      gsap.to(welcomeTextRef.current, {
-        duration: 3,
-        opacity: 1,
-        clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-        ease: "circ.out",
+      gsap.from(splitText.chars, {
+        xPercent: -101,
+        duration: 1,
+        stagger: 0.5,
+        ease: "easeCurve",
       });
     },
     { welcomeTextRef }
