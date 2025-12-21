@@ -13,7 +13,7 @@ import Experience from "./components/3DExperience/Experience";
 function App() {
   gsap.registerPlugin(SplitText, ScrollTrigger, ScrambleTextPlugin, CustomEase);
   return (
-    <main className="h-dvh">
+    <main className="h-full w-full">
       {/* <Routes>
         <Route path="/" element={<CodingExperience />} />
         <Route path="main-page" element={<Information />} />
