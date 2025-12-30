@@ -1,6 +1,7 @@
 import { Environment } from "@react-three/drei";
 
 function Light({ isDay }) {
+  console.log("Light rerendered");
   return (
     <>
       {isDay ? (
@@ -20,11 +21,17 @@ function Light({ isDay }) {
       ) : (
         <>
           <directionalLight
-            color="#9AE2ED"
+            color="#5AC0E3"
             intensity={1}
             position={[-1, 1, 1]}
           />
-          <ambientLight color="#A5E3E8" intensity={0.5} />
+          <ambientLight
+            color="#A5BAEB"
+            intensity={0.14}
+            position={[-1, 1, 1]}
+          />
+          <Environment preset="night" environmentIntensity={0.5} />
+          {/* <ambientLight color="#2B2E36" intensity={0.4} /> */}
         </>
       )}
     </>

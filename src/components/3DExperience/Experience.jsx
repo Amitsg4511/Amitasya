@@ -1,6 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import Model from "./Model";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Resume from "../Resume";
 import Night from "../../assets/svg/night.svg";
 import Morning from "../../assets/svg/morning.svg";
@@ -12,14 +12,17 @@ import useBackgroundMusic from "../../utils/BackgroundMusic";
 import mountainMusic from "../../assets/music/mountains.mp3";
 import { Perf } from "r3f-perf";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import * as THREE from "three";
+import AboutMe from "../AboutMe";
+import CurrentWorking from "../CurrentWorking";
+import Skills from "../Skills";
 export default function Experience() {
   const [isModalOpen, setModalState] = useState(false);
   const [isDay, setDayNightState] = useState(true);
-  const [isMusicOn, setMusicState] = useState(true);
+  const [isMusicOn, setMusicState] = useState(false);
   const music = useBackgroundMusic(mountainMusic);
-
+  const [modalName, setModalName] = useState("Resume");
   function handleModalState() {
-    console.log("clicked inside experience");
     setModalState(false);
   }
 
@@ -37,10 +40,23 @@ export default function Experience() {
     }
   }, [isMusicOn]);
 
+  function decideModal() {
+    if (modalName === "Resume") {
+      return <Resume handleModalState={handleModalState} />;
+    } else if (modalName === "AboutMe") {
+      return <AboutMe handleModalState={handleModalState} />;
+    } else if (modalName === "Now") {
+      return <CurrentWorking handleModalState={handleModalState} />;
+    } else if (modalName === "Skills") {
+      return <Skills handleModalState={handleModalState} />;
+    }
+  }
   return (
     <div
       className={`relative w-full h-dvh overflow-hidden ${
-        isDay ? "bg-linear-to-r from-[#00f6fa] to-[#ff7a14]" : "bg-[#1A1B2E]"
+        isDay
+          ? "bg-linear-to-r from-[#00f6fa] to-[#ff7a14]"
+          : "bg-linear-to-r from-[#0f172a]  to-[#334155]"
       }`}
     >
       <div
@@ -120,23 +136,34 @@ export default function Experience() {
       </div>
 
       {/* MODAL */}
-      {isModalOpen && <Resume handleModalState={handleModalState} />}
+      {isModalOpen && decideModal()}
 
       {/* 3D SCENE */}
-      <Canvas camera={{ fov: 25 }} className="absolute inset-0">
+      <Canvas
+        camera={{ fov: 25 }}
+        className="absolute inset-0"
+        gl={{
+          toneMapping: THREE.ACESFilmicToneMapping,
+          outputColorSpace: THREE.SRGBColorSpace,
+        }}
+      >
         <Perf position="top-left" />
         {!isDay && (
           <EffectComposer>
             <Bloom
-              intensity={0.5}
-              luminanceThreshold={0.9}
-              luminanceSmoothing={0.85}
+              intensity={0.3}
+              luminanceThreshold={1}
+              mipmapBlur={false} // Enables or disables mipmap blur.
             />
           </EffectComposer>
         )}
 
         <Suspense fallback={null}>
-          <Model modalState={setModalState} isDay={isDay} />
+          <Model
+            modalState={setModalState}
+            isDay={isDay}
+            setModalName={setModalName}
+          />
         </Suspense>
       </Canvas>
     </div>

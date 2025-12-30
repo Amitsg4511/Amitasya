@@ -1,62 +1,147 @@
 import { useRef, useEffect, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { checkIfFrameIsEmpty, OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useMediaQuery } from "react-responsive";
 import Light from "./Light";
 
-export default function Model({ modalState, isDay }) {
+function hexToHDRColor(hex, intensity = 1.5) {
+  const color = new THREE.Color(hex); // hex → linear RGB (0–1)
+  color.multiplyScalar(intensity); // push into HDR (>1)
+  return color;
+}
+
+export default function Model({ modalState, isDay, setModalName }) {
   const { camera } = useThree();
   const controls = useRef();
   const groupRef = useRef();
   const gltf = useGLTF("/models/MyRoom-v1.glb");
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
-  const mix = useRef({ value: 0 }); // 0 = day, 1 = night
+  const originalState = useRef(new Map());
+  const [meshMaterialType, setMeshMaterialType] = useState("");
+  // useEffect(() => {
+  //   gltf.scene.traverse((mesh) => {
+  //     if (!mesh.isMesh) return;
+  //     if (mesh.name.includes("Raycaster")) {
+  //       mesh.userData.interactive = true;
+  //     }
+  //   });
+  // }, [gltf]);
+  //// constants
+  const COLORS = [
+    "#00FFFF", // cyan
+    "#FF0080", // magenta
+    "#FFD700", // gold
+    "#00FF7F", // spring green
+    "#FF4500", // orange red
+    "#1E90FF", // dodger blue
+    "#ADFF2F", // green yellow
+    "#FF69B4", // hot pink
+    "#7B68EE", // medium slate blue
+    "#00CED1", // dark turquoise
+    "#FF6347", // tomato
+    "#40E0D0", // turquoise
+    "#C71585", // medium violet red
+    "#F4A460", // sandy brown
+  ];
+
+  const INTERACTIVE_NAMES = new Set([
+    "Resume_Raycaster_1",
+    "Resume_Raycaster",
+    "AboutMe_Raycaster",
+    "AboutMe_Raycaster_1",
+    "Now_Raycaster",
+    "Now_Raycaster_1",
+    "Skills_Raycaster",
+    "Skills_Raycaster_1",
+    "SocialMedia_Raycaster",
+    "SocialMedia_Raycaster_3",
+    "SocialMedia_Raycaster_4",
+    "BabyTintin_Raycaster",
+  ]);
 
   useEffect(() => {
-    gltf.scene.traverse((child) => {
-      if (!child.isMesh) return;
-      if (child.name.includes("Raycaster")) {
-        child.userData.interactive = true;
+    gltf.scene.traverse((mesh) => {
+      if (!mesh.isMesh) return;
+      if (INTERACTIVE_NAMES.has(mesh.name)) {
+        mesh.userData.interactive = true;
+      }
+      // store original material + visibility ONCE
+      if (!originalState.current.has(mesh.uuid)) {
+        originalState.current.set(mesh.uuid, {
+          material: mesh.material,
+          visible: mesh.visible,
+        });
       }
     });
   }, [gltf]);
 
   useEffect(() => {
-    gltf.scene.traverse((child) => {
-      if (!child.isMesh) return;
-      if (child.name === "Ground") {
-        child.material = child.material.clone();
-        child.material.color.set(isDay ? "#c9c6bd" : "#05474D");
-      }
-      // if (!isDay && child.material?.name === "Bulb") {
-      //   child.material = child.material.clone();
-      //   child.material.toneMapped = false;
-      //   child.material.color.set([4 * 40, 1 * 10, 4 * 12]);
-      //   child.material.emissive.set("#ffcc88");
-      //   child.material.emissiveIntensity = 2;
-      // }
-      if (child.material.name === "Material.001") {
-        child.visible = false;
+    gltf.scene.traverse((mesh) => {
+      if (!mesh.isMesh) return;
+      const original = originalState.current.get(mesh.uuid);
+      if (!original) return;
+
+      // ---------------- DAY MODE ----------------
+      if (isDay) {
+        mesh.material = original.material;
+        mesh.visible = original.visible;
+        return; // ⬅️ VERY IMPORTANT
       }
 
-      if (child.isMesh && child.material.name === "LaptopKeys" && !isDay) {
-        child.material = child.material.clone();
-        child.material.emissive.set("#37EDEA");
-        child.material.emissiveIntensity = 0.51;
-        child.material.roughness = 0.51;
-        child.material.metalness = 0.05;
+      // ---------------- NIGHT MODE ----------------
+
+      if (mesh.name === "Ground") {
+        mesh.material = mesh.material.clone();
+        mesh.material.color.set("#8F96A3");
+        mesh.material.roughness = 0.85;
+        mesh.material.metalness = 0.0;
       }
-      if (child.material.name === "Material.022" && !isDay) {
-        child.material = child.material.clone();
-        child.material.emissive.set("#F7FAF9");
-        child.material.emissiveIntensity = 0.1;
-        child.material.toneMapped = false;
-        child.material.metalness = 0.05;
+
+      if (mesh.name === "SocialMedia_Raycaster") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#FFFFFF"));
+      }
+
+      if (mesh.name === "SocialMedia_Raycaster_3") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#10015B", 5));
+      }
+
+      if (mesh.name === "SocialMedia_Raycaster_4") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#8cc156"));
+      }
+
+      if (mesh.name === "BabyTintin_Raycaster") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#FF69B4", 1.5));
+      }
+
+      if (mesh.material?.name === "Bulb") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#FFFCAC", 1.5));
+      }
+      if (mesh.name === "BigToy") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#FF69B4", 1.5));
+      }
+      if (mesh.name === "SmallToy") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#00FFFF", 1));
+      }
+      if (mesh.material?.name === "LaptopKeys") {
+        mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        mesh.material.color.copy(hexToHDRColor("#AAFEF4", 1));
+      }
+
+      if (mesh.material?.name === "Material.022") {
+        // mesh.material = new THREE.MeshBasicMaterial({ toneMapped: false });
+        // mesh.material.color.copy(hexToHDRColor("#AAFEF4", 0.5));
       }
     });
-  }, [isDay]);
+  }, [isDay, gltf, meshMaterialType]);
 
   useEffect(() => {
     let floor = null;
@@ -77,11 +162,11 @@ export default function Model({ modalState, isDay }) {
 
     controls.current.target.set(center.x, targetY, center.z);
 
-    // ---------- CAMERA ----------
+    // ---------- CAMERA Settings ----------
     const cameraConfig = isMobile
       ? { pos: [-1.5, -8.5, 14.5], fov: 35 }
       : isTablet
-      ? { pos: [-2.5, -10.5, 13], fov: 30 }
+      ? { pos: [-1, -10.5, 13], fov: 30 }
       : { pos: [-3, -11, 14], fov: 25 };
 
     camera.position.set(...cameraConfig.pos);
@@ -99,53 +184,42 @@ export default function Model({ modalState, isDay }) {
     scale *= 0.9;
   }
 
-  //// constants
-  const COLORS = [
-    "#00FFFF", // cyan
-    "#FF0080", // magenta
-    "#FFD700", // gold
-    "#00FF7F", // spring green
-    "#FF4500", // orange red
-    "#1E90FF", // dodger blue
-    "#ADFF2F", // green yellow
-    "#FF69B4", // hot pink
-    "#7B68EE", // medium slate blue
-    "#00CED1", // dark turquoise
-    "#FF6347", // tomato
-    "#40E0D0", // turquoise
-    "#C71585", // medium violet red
-    "#F4A460", // sandy brown
-  ];
-
-  //////////
   function handleClicks(e) {
     e.stopPropagation();
     const mesh = e.object;
-    if (mesh.userData.interactive) {
-    }
-    if (mesh.userData.interactive && mesh.name === "Resume_Raycaster_1") {
-      console.log(modalState(true));
-    } else if (
-      mesh.userData.interactive &&
-      mesh.name === "SocialMedia_Raycaster"
+    if (
+      mesh.name === "Resume_Raycaster_1" ||
+      mesh.name === "Resume_Raycaster"
     ) {
+      modalState(true);
+      setModalName("Resume");
+    } else if (
+      mesh.name === "AboutMe_Raycaster" ||
+      mesh.name === "AboutMe_Raycaster_1"
+    ) {
+      modalState(true);
+      setModalName("AboutMe");
+    } else if (
+      mesh.name === "Now_Raycaster" ||
+      mesh.name === "Now_Raycaster_1"
+    ) {
+      modalState(true);
+      setModalName("Now");
+    } else if (
+      mesh.name === "Skills_Raycaster" ||
+      mesh.name === "Skills_Raycaster_1"
+    ) {
+      modalState(true);
+      setModalName("Skills");
+    } else if (mesh.name === "SocialMedia_Raycaster") {
       window.open("https://www.github.com", "_blank", "noopener,noreferrer");
-    } else if (
-      mesh.userData.interactive &&
-      mesh.name === "SocialMedia_Raycaster_3"
-    ) {
+    } else if (mesh.name === "SocialMedia_Raycaster_3") {
       window.open("https://www.linkedin.com", "_blank", "noopener,noreferrer");
-    } else if (
-      mesh.userData.interactive &&
-      mesh.name === "SocialMedia_Raycaster_4"
-    ) {
+    } else if (mesh.name === "SocialMedia_Raycaster_4") {
       window.open("https://www.chess.com/", "_blank", "noopener,noreferrer");
-    } else if (
-      mesh.userData.interactive &&
-      mesh.name === "BabyTintin_Raycaster"
-    ) {
+    } else if (mesh.name === "BabyTintin_Raycaster") {
       const color = COLORS[Math.floor(Math.random() * COLORS.length)];
-      mesh.material.color.set(color);
+      mesh.material.color.copy(hexToHDRColor(color, 3));
     }
   }
   function handlePointer(e) {
