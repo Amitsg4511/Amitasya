@@ -1,69 +1,49 @@
 @import "tailwindcss";
-html, body,#root {
-  @apply bg-zinc-900 m-0 p-0;
+html,
+body,
+#root {
+  @apply bg-black m-0 p-0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
+:root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
+}
+.safe-area {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
 
 /* Theme variables for custom fonts */
 @theme {
-  --font-caudex: "Caudex", serif;
-  --font-firacode: "FiraCode", monospace;
   --font-googlecode: "GoogleSansCode", monospace;
   --font-merienda: "Merienda", sans-serif;
   --font-mukta: "Mukta", sans-serif;
-  --font-space-grotesk: "SpaceGrotesk", sans-serif;
   --font-science-gothic: "ScienceGothic", sans-serif;
   --font-fleur-de-leah: "FleurDeLeah", serif;
-  --font-exo2: "Exo2", sans-serif;
-  --font-chakra-petch: "ChakraPetch", sans-serif;
+  --font-BBHBogle: "BBHBogle", serif;
+  --font-Jersey: "Jersey", serif;
+  --font-Sekuya: "Sekuya", serif;
 }
 
 @layer base {
   /* Font utility classes */
-  .font-caudex { font-family: var(--font-caudex); }
-  .font-firacode { font-family: var(--font-firacode); }
   .font-googlecode { font-family: var(--font-googlesanscode); }
   .font-merienda { font-family: var(--font-merienda); }
   .font-mukta { font-family: var(--font-mukta); }
-   .font-space-grotesk { font-family: var(--font-space-grotesk); }
   .font-science-gothic { font-family: var(--font-science-gothic); }
   .font-fleur-de-leah { font-family: var(--font-fleur-de-leah); }
-  .font-exo2 { font-family: var(--font-exo2); }
-  .font-chakra-petch {  font-family: var(--font-chakra-petch); }
-
+  .font-BBH-Bogle { font-family: var(--font-BBH-Bogle); }
+  .font-Jersey { font-family: var(--font-Jersey); }
+  .font-Sekuya { font-family: var(--font-Sekuya); }
   @layer base {
-
-  /* ------------------------------
-     CAUDEX (regular TTF family)
-  ------------------------------- */
-  @font-face {
-    font-family: "Caudex";
-    src: url("/fonts/Caudex/Caudex-Regular.ttf") format("truetype");
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: "Caudex";
-    src: url("/fonts/Caudex/Caudex-Bold.ttf") format("truetype");
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: "Caudex";
-    src: url("/fonts/Caudex/Caudex-Italic.ttf") format("truetype");
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-  }
-  @font-face {
-    font-family: "Caudex";
-    src: url("/fonts/Caudex/Caudex-BoldItalic.ttf") format("truetype");
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-  }
 
   /* ------------------------------
      GOOGLE SANS CODE (variable)
@@ -110,18 +90,6 @@ html, body,#root {
   @font-face { font-family: "Mukta"; src: url("/fonts/Mukta/Mukta-ExtraBold.ttf") format("truetype"); font-weight: 800; font-style: normal; font-display: swap; }
 
   /* ------------------------------
-     SPACE GROTESK (variable)
-  ------------------------------- */
-  @font-face {
-    font-family: "SpaceGrotesk";
-    src: url("/fonts/Space_Grotesk/SpaceGrotesk-VariableFont_wght.ttf")
-         format("truetype-variations");
-    font-weight: 400 700; /* supports variable range */
-    font-style: normal;
-    font-display: swap;
-  }
-
-  /* ------------------------------
      SCIENCE GOTHIC (variable)
   ------------------------------- */
   @font-face {
@@ -145,40 +113,39 @@ html, body,#root {
     font-display: swap;
   }
 
-  /* ------------------------------
-     EXO 2 (variable + italic)
+    /* ------------------------------
+     BBH Bogle (regular)
   ------------------------------- */
   @font-face {
-    font-family: "Exo2";
-    src: url("/fonts/Exo_2/Exo2-VariableFont_wght.ttf")
-         format("truetype-variations");
-    font-weight: 100 900;
+    font-family: "BBHBogle";
+    src: url("/fonts/BBH_Bogle/BBHBogle-Regular.ttf")
+         format("truetype");
+    font-weight: 400;
     font-style: normal;
     font-display: swap;
   }
-
+    /* ------------------------------
+     BBH Bogle (regular)
+  ------------------------------- */
   @font-face {
-    font-family: "Exo2";
-    src: url("/fonts/Exo_2/Exo2-Italic-VariableFont_wght.ttf")
-         format("truetype-variations");
-    font-weight: 100 900;
-    font-style: italic;
+    font-family: "Jersey";
+    src: url("/fonts/Jersey_10/Jersey10-Regular.ttf")
+         format("truetype");
+    font-weight: 400;
+    font-style: normal;
     font-display: swap;
   }
-
-  /* ------------------------------
-     CHAKRA PETCH (regular TTFs)
+    /* ------------------------------
+     BBH Bogle (regular)
   ------------------------------- */
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-Light.ttf") format("truetype"); font-weight: 300; font-style: normal; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-LightItalic.ttf") format("truetype"); font-weight: 300; font-style: italic; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-Regular.ttf") format("truetype"); font-weight: 400; font-style: normal; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-Italic.ttf") format("truetype"); font-weight: 400; font-style: italic; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-Medium.ttf") format("truetype"); font-weight: 500; font-style: normal; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-MediumItalic.ttf") format("truetype"); font-weight: 500; font-style: italic; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-SemiBold.ttf") format("truetype"); font-weight: 600; font-style: normal; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-SemiBoldItalic.ttf") format("truetype"); font-weight: 600; font-style: italic; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-Bold.ttf") format("truetype"); font-weight: 700; font-style: normal; font-display: swap; }
-  @font-face { font-family: "ChakraPetch"; src: url("/fonts/ChakraPetch-BoldItalic.ttf") format("truetype"); font-weight: 700; font-style: italic; font-display: swap; }
+  @font-face {
+    font-family: "Sekuya";
+    src: url("/fonts/Sekuya/Sekuya-Regular.ttf")
+         format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
 }
 
 }

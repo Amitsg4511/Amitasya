@@ -2,34 +2,29 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useRef } from "react";
 import ScrambleText from "./ScrambleText";
-import { CustomEase, SplitText } from "gsap/all";
+import { SplitText } from "gsap/all";
+import Button from "./Button";
 
 function Information() {
   const containerRef = useRef(null);
-  const mainContentRef = useRef(null);
   const welcomeTextRef = useRef(null);
-  CustomEase.create(
-    "easeCurve",
-    "M0,0 C0.126,0.382 0.519,0.314 0.641,0.52 0.701,0.622 0.818,1.001 1,1 "
-  );
   useGSAP(
     () => {
       const containerElement = containerRef.current;
-      const mainContainerElement = mainContentRef.current;
 
-      if (!containerElement || !mainContainerElement) return;
-
+      if (!containerElement) return;
+      gsap.set(containerElement, { opacity: 0 });
       const timeline = gsap.timeline();
       timeline
         .to(containerElement, {
           duration: 1,
           clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
-          ease: "easeCurve",
+          ease: "circ.inOut",
         })
-        .to(mainContentRef.current, {
+        .to(containerElement, {
           opacity: 1,
           duration: 1,
-          ease: "easeCurve",
+          ease: "sine.inOut",
         });
     },
     { scope: containerRef }
@@ -41,37 +36,105 @@ function Information() {
         type: "chars",
       });
       gsap.from(splitText.chars, {
-        xPercent: -101,
-        duration: 1,
-        stagger: 0.5,
-        ease: "easeCurve",
+        y: -51,
+        duration: 2,
+        opacity: 0,
+        ease: "elastic.inOut",
+        stagger: {
+          from: 4,
+          each: 0.05,
+          ease: "elastic.inOut",
+        },
       });
     },
-    { welcomeTextRef }
+    { scope: welcomeTextRef }
   );
 
   return (
     <div
-      className="relative min-h-dvh w-full overflow-x-hidden"
       ref={containerRef}
+      className="relative h-full w-full flex lg:p-5 p-3"
       style={{ clipPath: "polygon(51% 0, 51% 0%, 51% 100%, 51% 100%)" }}
     >
-      <div ref={mainContentRef} className="opacity-0">
-        <div className="absolute inset-0 bg-[url('/images/developer.jpg')] bg-cover bg-center opacity-40 pointer-events-none"></div>
-        <div className="relative md:p-5 p-3 md:left-14 md:top-12 top-12 h-auto w-full flex flex-col md:justify-start md:items-start text-center md:text-start">
+      <div
+        className="flex flex-col lg:p-5 p-3 
+      items-center-safe justify-center-safe w-full
+      "
+      >
+        <div
+          ref={welcomeTextRef}
+          className="relative inline-block group uppercase lg:-left-[14%]"
+        >
           <div
-            ref={welcomeTextRef}
-            className="w-full md:w-1/2 text-center md:p-3 text-white font-science-gothic font-bold md:text-[5rem] text-[3rem]"
+            aria-hidden
+            className="
+                absolute -inset-1 bg-linear-to-r from-green-200 via-emerald-400 to-teal-600
+                blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-300"
+          />
+          <h1
+            className="relative text-white px-5 bg-black rounded-xl font-Sekuya
+                 lg:text-[4rem] md:text-[3rem] text-2xl group-hover:text-rose-300 transition duration-300
+                 "
           >
-            <h1>Welcome</h1>
-          </div>
+            Welcome
+          </h1>
+        </div>
 
-          <div className="text-white border md:max-w-1/2 border-red-300 box-border font-merienda md:text-3xl text-2xl md:p-5">
-            <ScrambleText />
-          </div>
+        <div className="lg:max-w-[70%] lg:mt-14 md:mt-9 mt-5 font-merienda lg:text-3xl text-xl p-3 lg:p-5">
+          <ScrambleText />
+        </div>
+        <div className="lg:mt-18 md:mt-11 mt-9 md:text-3xl text-xl text-white">
+          <Button>Experience</Button>
         </div>
       </div>
     </div>
+    // <div
+    //   ref={containerRef}
+    //   className="relative min-h-dvh w-full flex justify-center"
+    //   style={{ clipPath: "polygon(51% 0, 51% 0%, 51% 100%, 51% 100%)" }}
+    // >
+    //   <div
+    //     className="lg:w-[70%] w-full flex flex-col items-center justify-center
+    //               gap-y-5 px-4 lg:px-3"
+    //   >
+    //     {/* WELCOME */}
+    //     <div
+    //       ref={welcomeTextRef}
+    //       className="relative inline-block group uppercase"
+    //     >
+    //       <div
+    //         aria-hidden
+    //         className="
+    //       absolute -inset-1
+    //       bg-linear-to-r from-green-200 via-emerald-400 to-teal-600
+    //       blur opacity-75
+    //       group-hover:opacity-100
+    //       transition duration-1000
+    //     "
+    //       />
+    //       <h1
+    //         className="
+    //       relative text-white bg-black rounded-xl px-5
+    //       font-Sekuya
+    //       lg:text-[5rem] text-[3rem]
+    //       group-hover:text-rose-300 transition duration-300
+    //     "
+    //       >
+    //         Welcome
+    //       </h1>
+    //     </div>
+
+    //     {/* SCRAMBLE */}
+    //     <div className="font-merienda lg:text-3xl text-2xl max-w-prose">
+    //       <ScrambleText />
+    //     </div>
+
+    //     {/* BUTTON — NOW SAFE */}
+    //     <div className="pt-4 text-white text-3xl">
+    //       <Button>Experience</Button>
+    //     </div>
+    //   </div>
+    // </div>
   );
 }
 

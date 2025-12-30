@@ -9,16 +9,18 @@ import {
   SplitText,
 } from "gsap/all";
 import Experience from "./components/3DExperience/Experience";
+import Resume from "./components/Resume";
 
 function App() {
   gsap.registerPlugin(SplitText, ScrollTrigger, ScrambleTextPlugin, CustomEase);
   return (
-    <main className="h-dvh">
-      {/* <Routes>
+    <main className="h-full w-full">
+      <Routes>
         <Route path="/" element={<CodingExperience />} />
         <Route path="main-page" element={<Information />} />
-      </Routes> */}
-      <Experience />
+        <Route path="/experience" element={<Experience />} />
+      </Routes>
+      {/* <Experience /> */}
     </main>
   );
 }

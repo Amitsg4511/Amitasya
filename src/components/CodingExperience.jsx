@@ -60,13 +60,13 @@ IntrodureSelf()`;
       className="flex flex-col items-center justify-center min-h-screen p-4"
     >
       <div
-        className="font-googlecode text-cyan-300 md:text-3xl md:font-medium text-base font-medium
+        className="font-googlecode text-cyan-300 lg:text-3xl lg:font-medium text-base font-medium
       relative w-full max-w-xl shadow-xl shadow-cyan-200 p-5 leading-relaxed whitespace-pre-wrap"
       >
         <span ref={codeRef}></span>
         <span
           ref={cursorRef}
-          className="inline-block w-0.5 md:h-[41px] h-[14px] bg-red-500 ml-0.5 align-middle"
+          className="inline-block w-0.5 lg:h-[41px] h-[14px] bg-red-500 ml-0.5 align-middle"
         ></span>
       </div>
     </div>
