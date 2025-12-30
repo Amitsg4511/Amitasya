@@ -1,62 +1,28 @@
 import { useRef, useEffect, useState } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { useThree } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useMediaQuery } from "react-responsive";
 import Light from "./Light";
+import { redirect, useNavigate } from "react-router";
 
-export default function Model({ modalState, isDay }) {
+export default function Model({ modalState }) {
   const { camera } = useThree();
   const controls = useRef();
   const groupRef = useRef();
   const gltf = useGLTF("/models/MyRoom-v1.glb");
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
-  const mix = useRef({ value: 0 }); // 0 = day, 1 = night
-
   useEffect(() => {
     gltf.scene.traverse((child) => {
-      if (!child.isMesh) return;
-      if (child.name.includes("Raycaster")) {
+      if (child.isMesh) {
+        child.material.depthWrite = true;
+      }
+      if (child.isMesh && child.name.includes("Raycaster")) {
         child.userData.interactive = true;
       }
     });
   }, [gltf]);
-
-  useEffect(() => {
-    gltf.scene.traverse((child) => {
-      if (!child.isMesh) return;
-      if (child.name === "Ground") {
-        child.material = child.material.clone();
-        child.material.color.set(isDay ? "#c9c6bd" : "#05474D");
-      }
-      // if (!isDay && child.material?.name === "Bulb") {
-      //   child.material = child.material.clone();
-      //   child.material.toneMapped = false;
-      //   child.material.color.set([4 * 40, 1 * 10, 4 * 12]);
-      //   child.material.emissive.set("#ffcc88");
-      //   child.material.emissiveIntensity = 2;
-      // }
-      if (child.material.name === "Material.001") {
-        child.visible = false;
-      }
-
-      if (child.isMesh && child.material.name === "LaptopKeys" && !isDay) {
-        child.material = child.material.clone();
-        child.material.emissive.set("#37EDEA");
-        child.material.emissiveIntensity = 0.51;
-        child.material.roughness = 0.51;
-        child.material.metalness = 0.05;
-      }
-      if (child.material.name === "Material.022" && !isDay) {
-        child.material = child.material.clone();
-        child.material.emissive.set("#F7FAF9");
-        child.material.emissiveIntensity = 0.1;
-        child.material.toneMapped = false;
-        child.material.metalness = 0.05;
-      }
-    });
-  }, [isDay]);
 
   useEffect(() => {
     let floor = null;
@@ -158,7 +124,7 @@ export default function Model({ modalState, isDay }) {
   }
   return (
     <>
-      ( <Light isDay={isDay} />
+      ( <Light />
       <group
         ref={groupRef}
         scale={scale}

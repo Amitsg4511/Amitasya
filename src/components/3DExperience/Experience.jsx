@@ -10,11 +10,10 @@ import MusicOnNight from "../../assets/svg/music-on-night.svg";
 import MusicOnMorning from "../../assets/svg/music-on-morning.svg";
 import useBackgroundMusic from "../../utils/BackgroundMusic";
 import mountainMusic from "../../assets/music/mountains.mp3";
-import { Perf } from "r3f-perf";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
+
 export default function Experience() {
   const [isModalOpen, setModalState] = useState(false);
-  const [isDay, setDayNightState] = useState(true);
+  const [isDay, setDayNightState] = useState(false);
   const [isMusicOn, setMusicState] = useState(true);
   const music = useBackgroundMusic(mountainMusic);
 
@@ -25,6 +24,7 @@ export default function Experience() {
 
   function handleDayNightState() {
     setDayNightState((prevDayState) => !prevDayState);
+    console.log(isDay);
   }
   function handleMusicState() {
     setMusicState((prevMusicState) => !prevMusicState);
@@ -38,11 +38,7 @@ export default function Experience() {
   }, [isMusicOn]);
 
   return (
-    <div
-      className={`relative w-full h-dvh overflow-hidden ${
-        isDay ? "bg-linear-to-r from-[#00f6fa] to-[#ff7a14]" : "bg-[#1A1B2E]"
-      }`}
-    >
+    <div className="relative w-full h-dvh overflow-hidden">
       <div
         className="
       fixed z-50
@@ -124,19 +120,8 @@ export default function Experience() {
 
       {/* 3D SCENE */}
       <Canvas camera={{ fov: 25 }} className="absolute inset-0">
-        <Perf position="top-left" />
-        {!isDay && (
-          <EffectComposer>
-            <Bloom
-              intensity={0.5}
-              luminanceThreshold={0.9}
-              luminanceSmoothing={0.85}
-            />
-          </EffectComposer>
-        )}
-
         <Suspense fallback={null}>
-          <Model modalState={setModalState} isDay={isDay} />
+          <Model modalState={setModalState} />
         </Suspense>
       </Canvas>
     </div>

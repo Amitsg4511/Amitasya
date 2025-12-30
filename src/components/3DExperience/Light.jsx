@@ -1,32 +1,27 @@
-import { Environment } from "@react-three/drei";
-
-function Light({ isDay }) {
+import { useControls } from "leva";
+import * as Three from "three";
+function Light({ isMobile }) {
   return (
     <>
-      {isDay ? (
-        <>
-          {/* <ambientLight intensity={0.5} color="#e6e1d6" /> */}
-          <directionalLight
-            intensity={1}
-            position={[-3, 5, 3]}
-            color="#fff1cc"
-          />
-          <Environment
-            environmentIntensity={1}
-            preset="forest"
-            environmentRotation={[0, 0, 1]}
-          />
-        </>
-      ) : (
-        <>
-          <directionalLight
-            color="#9AE2ED"
-            intensity={1}
-            position={[-1, 1, 1]}
-          />
-          <ambientLight color="#A5E3E8" intensity={0.5} />
-        </>
-      )}
+      <spotLight
+        intensity={100}
+        position={isMobile ? [0, 3, 5] : [0, 3, 9]}
+        angle={0.5}
+        penumbra={0.3}
+        color={"cyan"}
+      />
+      <spotLight
+        intensity={100}
+        position={isMobile ? [0, 1, 5] : [-0.5, 0.3, 5]}
+        angle={isMobile ? 0.18 : 0.3}
+        penumbra={0.3}
+        color={"yello"}
+      />
+      <directionalLight intensity={5} position={[-0.5, 2, 1]} />
+      <primitive
+        object={new Three.RectAreaLight("white", 5, 5, 3)}
+        position={isMobile ? [-1, 0, 0] : [0, -1, -1]}
+      />
     </>
   );
 }
