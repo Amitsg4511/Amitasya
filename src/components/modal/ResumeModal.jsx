@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
+import closeButtonMorning from "../../assets/svg/closeButtonMorning.svg";
+import closeButtonNight from "../../assets/svg/closeButtonNight.svg";
 
 export default function ResumeModal({ handleModalState, isDay }) {
   const overlayRef = useRef(null);
@@ -80,13 +82,17 @@ export default function ResumeModal({ handleModalState, isDay }) {
               onClick={handleModalState}
               aria-label="Close modal"
               className="
-        text-white/80 hover:text-white
-        transition
-        text-2xl sm:text-3xl md:text-5xl
-        leading-none
-      "
+              transition
+              w-14 h-14
+              leading-none
+              cursor-pointer
+            "
             >
-              ✕
+              {isDay ? (
+                <img src={closeButtonMorning} alt="close button" />
+              ) : (
+                <img src={closeButtonNight} alt="close button" />
+              )}
             </button>
           </div>
         </div>

@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
+import closeButtonMorning from "../../assets/svg/closeButtonMorning.svg";
+import closeButtonNight from "../../assets/svg/closeButtonNight.svg";
 
 export default function SkillsModal({ handleModalState, isDay }) {
   const overlayRef = useRef(null);
@@ -50,9 +52,13 @@ export default function SkillsModal({ handleModalState, isDay }) {
           </div>
           <button
             onClick={handleModalState}
-            className="text-white/70 hover:text-white transition text-3xl md:text-5xl"
+            className="transition w-14 h-14 md:w-18 md:h-18 cursor-pointer"
           >
-            ✕
+            {isDay ? (
+              <img src={closeButtonMorning} alt="close button" />
+            ) : (
+              <img src={closeButtonNight} alt="close button" />
+            )}
           </button>
         </div>
 

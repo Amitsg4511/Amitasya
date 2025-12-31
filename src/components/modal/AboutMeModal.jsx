@@ -1,5 +1,7 @@
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
+import closeButtonMorning from "../../assets/svg/closeButtonMorning.svg";
+import closeButtonNight from "../../assets/svg/closeButtonNight.svg";
 
 export default function AboutMeModal({ handleModalState, isDay }) {
   const overlayRef = useRef(null);
@@ -40,15 +42,19 @@ export default function AboutMeModal({ handleModalState, isDay }) {
       >
         <div className="flex items-center justify-around px-5 py-3">
           <div className="bg-[#333030] px-9 py-2 rounded-3xl">
-            <h2 className="text-xl md:text-5xl inset-0 font-semibold font-Sekuya text-[#50fef6]">
+            <h2 className="text-[2rem] md:text-5xl inset-0 font-semibold font-Sekuya text-[#50fef6]">
               About Me
             </h2>
           </div>
           <button
             onClick={handleModalState}
-            className="text-white/70 hover:text-white transition text-3xl md:text-5xl"
+            className="transition w-14 h-14 md:w-18 md:h-18 cursor-pointer"
           >
-            ✕
+            {isDay ? (
+              <img src={closeButtonMorning} alt="close button" />
+            ) : (
+              <img src={closeButtonNight} alt="close button" />
+            )}
           </button>
         </div>
         <div className="p-6 overflow-y-auto max-h-[calc(85dvh-4rem)] space-y-6">

@@ -1,10 +1,10 @@
 import { useRef, useEffect, useState } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
-import { checkIfFrameIsEmpty, OrbitControls, useGLTF } from "@react-three/drei";
+import { useThree } from "@react-three/fiber";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { useMediaQuery } from "react-responsive";
 import Light from "./Light";
-
+import { COLORS, INTERACTIVE_NAMES } from "../../utils/Data";
 function hexToHDRColor(hex, intensity = 1.5) {
   const color = new THREE.Color(hex); // hex → linear RGB (0–1)
   color.multiplyScalar(intensity); // push into HDR (>1)
@@ -19,7 +19,7 @@ export default function Model({ modalState, isDay, setModalName }) {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
   const originalState = useRef(new Map());
-  const [meshMaterialType, setMeshMaterialType] = useState("");
+
   // useEffect(() => {
   //   gltf.scene.traverse((mesh) => {
   //     if (!mesh.isMesh) return;
@@ -29,37 +29,6 @@ export default function Model({ modalState, isDay, setModalName }) {
   //   });
   // }, [gltf]);
   //// constants
-  const COLORS = [
-    "#00FFFF", // cyan
-    "#FF0080", // magenta
-    "#FFD700", // gold
-    "#00FF7F", // spring green
-    "#FF4500", // orange red
-    "#1E90FF", // dodger blue
-    "#ADFF2F", // green yellow
-    "#FF69B4", // hot pink
-    "#7B68EE", // medium slate blue
-    "#00CED1", // dark turquoise
-    "#FF6347", // tomato
-    "#40E0D0", // turquoise
-    "#C71585", // medium violet red
-    "#F4A460", // sandy brown
-  ];
-
-  const INTERACTIVE_NAMES = new Set([
-    "Resume_Raycaster_1",
-    "Resume_Raycaster",
-    "AboutMe_Raycaster",
-    "AboutMe_Raycaster_1",
-    "Now_Raycaster",
-    "Now_Raycaster_1",
-    "Skills_Raycaster",
-    "Skills_Raycaster_1",
-    "SocialMedia_Raycaster",
-    "SocialMedia_Raycaster_3",
-    "SocialMedia_Raycaster_4",
-    "BabyTintin_Raycaster",
-  ]);
 
   useEffect(() => {
     gltf.scene.traverse((mesh) => {
@@ -82,7 +51,6 @@ export default function Model({ modalState, isDay, setModalName }) {
       if (!mesh.isMesh) return;
       const original = originalState.current.get(mesh.uuid);
       if (!original) return;
-
       // ---------------- DAY MODE ----------------
       if (isDay) {
         mesh.material = original.material;
@@ -141,7 +109,7 @@ export default function Model({ modalState, isDay, setModalName }) {
         // mesh.material.color.copy(hexToHDRColor("#AAFEF4", 0.5));
       }
     });
-  }, [isDay, gltf, meshMaterialType]);
+  }, [isDay, gltf]);
 
   useEffect(() => {
     let floor = null;
@@ -217,7 +185,7 @@ export default function Model({ modalState, isDay, setModalName }) {
       window.open("https://www.linkedin.com", "_blank", "noopener,noreferrer");
     } else if (mesh.name === "SocialMedia_Raycaster_4") {
       window.open("https://www.chess.com/", "_blank", "noopener,noreferrer");
-    } else if (mesh.name === "BabyTintin_Raycaster") {
+    } else if (mesh.name === "BabyTintin_Raycaster" && !isDay) {
       const color = COLORS[Math.floor(Math.random() * COLORS.length)];
       mesh.material.color.copy(hexToHDRColor(color, 3));
     }
@@ -238,6 +206,7 @@ export default function Model({ modalState, isDay, setModalName }) {
         scale={scale}
         onClick={handleClicks}
         onPointerEnter={handlePointer}
+        onPointerLeave={() => (document.body.style.cursor = "default")}
       >
         <primitive object={gltf.scene} />
       </group>

@@ -1,7 +1,6 @@
 import { Environment } from "@react-three/drei";
 
 function Light({ isDay }) {
-  console.log("Light rerendered");
   return (
     <>
       {isDay ? (
