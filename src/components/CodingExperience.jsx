@@ -9,13 +9,17 @@ const CodingExperience = () => {
   const containerRef = useRef(null);
   let navigate = useNavigate();
 
-  const codeString = `def IntrodureSelf():
-    Greet = 'Welcome'
-    Name = 'Amit Kumar'
-    print(f'\${Greet}')
-    print(f'I am \${Name}')
+  const codeString = `[amit@linux ~]$ sudo su
+[sudo] password for amit: 
 
-IntrodureSelf()`;
+[root@linux amit]# whoami
+Amit Kumar
+
+[root@linux amit]# role
+Software Developer
+
+[root@linux amit]# focus
+Fast, beautiful, meaningful web experiences`;
 
   useGSAP(
     () => {
@@ -31,8 +35,13 @@ IntrodureSelf()`;
       function type() {
         if (index < codeString.length) {
           const char = codeString[index];
-          codeElement.innerHTML +=
-            char === "\n" ? "<br>" : char === " " ? "&nbsp;" : char;
+
+          if (char === "\n") {
+            codeElement.appendChild(document.createElement("br"));
+          } else {
+            codeElement.appendChild(document.createTextNode(char));
+          }
+
           index++;
           setTimeout(type, 51);
         } else {
@@ -42,6 +51,7 @@ IntrodureSelf()`;
             repeat: -1,
             yoyo: true,
           });
+
           setTimeout(() => {
             blink.kill();
             cursorElement.style.display = "none";
@@ -49,6 +59,7 @@ IntrodureSelf()`;
           }, 3000);
         }
       }
+
       type();
     },
     { scope: containerRef }
@@ -57,17 +68,31 @@ IntrodureSelf()`;
   return (
     <div
       ref={containerRef}
-      className="flex flex-col items-center justify-center min-h-screen p-4"
+      className="flex min-h-screen w-full items-center justify-center px-3"
     >
       <div
-        className="font-googlecode text-cyan-300 lg:text-3xl lg:font-medium text-base font-medium
-      relative w-full max-w-xl shadow-xl shadow-cyan-200 p-5 leading-relaxed whitespace-pre-wrap"
+        className=" font-googlecode
+    text-cyan-300 font-medium leading-relaxed
+      text-sm sm:text-base lg:text-3xl
+
+      w-full
+      max-w-full sm:max-w-[640px] lg:max-w-[900px]
+      min-w-0
+
+      p-4 sm:p-5
+      rounded-lg
+      shadow-xl shadow-cyan-200
+
+      whitespace-pre-wrap
+      break-normal
+      overflow-x-hidden
+    "
       >
-        <span ref={codeRef}></span>
+        <span ref={codeRef} />
         <span
           ref={cursorRef}
-          className="inline-block w-0.5 lg:h-[41px] h-[14px] bg-red-500 ml-0.5 align-middle"
-        ></span>
+          className="inline-block w-[2px] h-[1em] bg-red-500 ml-1 align-middle"
+        />
       </div>
     </div>
   );

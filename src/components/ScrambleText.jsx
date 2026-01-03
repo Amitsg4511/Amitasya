@@ -4,12 +4,12 @@ import { CustomEase } from "gsap/all";
 
 import React, { useRef } from "react";
 
-function ScrambleText() {
+function ScrambleText({ experienceRef }) {
   const hiTextRef = useRef(null);
   const nameTextRef = useRef(null);
   const personalSignificanceTextRef = useRef(null);
   const descriptionTextRef = useRef(null);
-  const waveRef = useRef(null);
+  const welcomeRef = useRef(null);
   const scrambleTextRef = useRef(null);
   const ImRef = useRef(null);
   useGSAP(
@@ -18,6 +18,7 @@ function ScrambleText() {
         "easeCurve",
         "M0,0 C0.126,0.382 0.519,0.314 0.641,0.52 0.701,0.622 0.818,1.001 1,1 "
       );
+      gsap.set(welcomeRef.current, { opacity: 0 });
       const timeline = gsap.timeline({ delay: 1 });
 
       timeline
@@ -27,35 +28,31 @@ function ScrambleText() {
             text: "Hi,",
             chars: "4511",
             ease: "easeCurve",
-            revealDelay: 0.5,
+            revealDelay: 0.3,
             speed: 0.3,
           },
-        })
-        .fromTo(
-          waveRef.current,
-          {
-            rotation: -25,
-            ease: "easeCurve",
-            transformOrigin: "70% 70%",
+          onComplete: () => {
+            gsap.to(welcomeRef.current, {
+              opacity: 1,
+              duration: 0.5,
+              ease: "easeCurve",
+            });
           },
+        })
+        .to(
+          ImRef.current,
           {
-            rotation: 30,
-            duration: 0.4,
-            ease: "easeCurve",
-            yoyo: true,
-            repeat: -1,
-          }
+            duration: 1,
+            scrambleText: {
+              text: "I'm",
+              chars: "4511",
+              ease: "easeCurve",
+              revealDelay: 0.5,
+              speed: 0.5,
+            },
+          },
+          "-=0.5"
         )
-        .to(ImRef.current, {
-          duration: 1,
-          scrambleText: {
-            text: "I'm",
-            chars: "4511",
-            ease: "easeCurve",
-            revealDelay: 0.5,
-            speed: 0.2,
-          },
-        })
         .to(
           nameTextRef.current,
           {
@@ -65,7 +62,7 @@ function ScrambleText() {
               chars: "4511",
               ease: "easeCurve",
               revealDelay: 0.5,
-              speed: 0.2,
+              speed: 0.3,
             },
           },
           "-=0.5"
@@ -79,7 +76,7 @@ function ScrambleText() {
               chars: "4511",
               revealDelay: 0.5,
               ease: "easeCurve",
-              speed: 0.1,
+              speed: 0.3,
             },
           },
           "-=0.5"
@@ -91,8 +88,16 @@ function ScrambleText() {
             scrambleText: {
               text: "I'm passionate about continuous learning and exploring new technologies to create solutions that make an impact.",
               chars: "4511",
-              revealDelay: 0.5,
-              speed: 0.1,
+              revealDelay: 0.3,
+              speed: 0.3,
+            },
+            onComplete: () => {
+              gsap.to(experienceRef.current, {
+                opacity: 1,
+                delay: 1,
+                yPercent: 51,
+                duration: 3,
+              });
             },
           },
           "-=0.5"
@@ -103,30 +108,21 @@ function ScrambleText() {
   return (
     <p
       className="text-transparent
-          bg-linear-to-r from-pink-500 via-red-500 to-orange-500 bg-clip-text"
+          bg-linear-to-r from-cyan-300 to-orange-500 bg-clip-text space-x-3 shadow-[0_5px_14px_3px] shadow-cyan-200 p-5 rounded-3xl"
       ref={scrambleTextRef}
     >
       <span ref={hiTextRef}></span>
-      <span
-        ref={waveRef}
-        role="img"
-        aria-label="wave"
-        className="inline-block transform"
-        style={{ transformOrigin: "70% 70%" }}
-      >
-        👋
-      </span>
       <br />
       <span ref={ImRef}></span>
       <span
         ref={nameTextRef}
-        className="ms-3 md:ms-5 font-fleur-de-leah text-4xl md:text-5xl 
+        className="mb-3 font-fleur-de-leah text-4xl md:text-5xl 
         font-semibold underline
-        decoration-orange-500
+        decoration-cyan-300
         decoration-2
         underline-offset-8 
          text-transparent
-        bg-linear-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text
+        bg-linear-to-r from-red-400 via-orange-500 to-cyan-300 bg-clip-text
         "
       ></span>
       <br />
