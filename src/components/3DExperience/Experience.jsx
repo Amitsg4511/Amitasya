@@ -1,7 +1,6 @@
 import { Canvas } from "@react-three/fiber";
 import Model from "./Model";
-import { Suspense, useEffect, useRef, useState } from "react";
-import Resume from "../Resume";
+import { Suspense, useEffect, useState } from "react";
 import Night from "../../assets/svg/night.svg";
 import Morning from "../../assets/svg/morning.svg";
 import MusicOffNight from "../../assets/svg/music-off-night.svg";
@@ -11,17 +10,21 @@ import MusicOnMorning from "../../assets/svg/music-on-morning.svg";
 import useBackgroundMusic from "../../utils/BackgroundMusic";
 import mountainMusic from "../../assets/music/mountains.mp3";
 import { Perf } from "r3f-perf";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
-import AboutMe from "../AboutMe";
-import CurrentWorking from "../CurrentWorking";
-import Skills from "../Skills";
+import { useMediaQuery } from "react-responsive";
+import ResumeModal from "../modal/ResumeModal";
+import AboutMeModal from "../modal/AboutMeModal";
+import NowModal from "../modal/NowModal";
+import SkillsModal from "../modal/SkillsModal";
+import { Bloom, EffectComposer } from "@react-three/postprocessing";
 export default function Experience() {
   const [isModalOpen, setModalState] = useState(false);
   const [isDay, setDayNightState] = useState(true);
   const [isMusicOn, setMusicState] = useState(false);
   const music = useBackgroundMusic(mountainMusic);
   const [modalName, setModalName] = useState("Resume");
+  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1024 });
   function handleModalState() {
     setModalState(false);
   }
@@ -42,13 +45,13 @@ export default function Experience() {
 
   function decideModal() {
     if (modalName === "Resume") {
-      return <Resume handleModalState={handleModalState} />;
+      return <ResumeModal handleModalState={handleModalState} isDay={isDay} />;
     } else if (modalName === "AboutMe") {
-      return <AboutMe handleModalState={handleModalState} />;
+      return <AboutMeModal handleModalState={handleModalState} isDay={isDay} />;
     } else if (modalName === "Now") {
-      return <CurrentWorking handleModalState={handleModalState} />;
+      return <NowModal handleModalState={handleModalState} isDay={isDay} />;
     } else if (modalName === "Skills") {
-      return <Skills handleModalState={handleModalState} />;
+      return <SkillsModal handleModalState={handleModalState} isDay={isDay} />;
     }
   }
   return (
@@ -147,7 +150,7 @@ export default function Experience() {
           outputColorSpace: THREE.SRGBColorSpace,
         }}
       >
-        <Perf position="top-left" />
+        {!isMobile && <Perf position="top-left" />}
         {!isDay && (
           <EffectComposer>
             <Bloom
