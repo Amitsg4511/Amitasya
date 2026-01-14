@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import closeButtonMorning from "../../assets/svg/closeButtonMorning.svg";
 import closeButtonNight from "../../assets/svg/closeButtonNight.svg";
+import resume from "../../assets/resume/Amit_Kumar.pdf";
 
 export default function ResumeModal({ handleModalState, isDay }) {
   const overlayRef = useRef(null);
@@ -57,7 +58,7 @@ export default function ResumeModal({ handleModalState, isDay }) {
           <div className="flex items-center gap-3 shrink-0">
             {/* Download */}
             <a
-              href="src/assets/resume/Amit_Kumar.pdf"
+              href={resume}
               download
               target="_blank"
               rel="noopener noreferrer"
