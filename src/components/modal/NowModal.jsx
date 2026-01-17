@@ -37,7 +37,7 @@ export default function NowModal({ handleModalState, isDay }) {
         ref={modalRef}
         className={`relative z-10
           w-[90%] sm:w-[85%] md:w-[70%] lg:w-[55%]
-          max-h-[90svh] md:max-h-[95svh]
+          h-[95svh] md:max-h-[95svh]
           ${isDay ? "bg-[#303034]/90" : "bg-zinc-900/90"}
           rounded-2xl
           border-4 border-[#ff7a14]

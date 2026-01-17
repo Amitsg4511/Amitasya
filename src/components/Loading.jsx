@@ -19,7 +19,7 @@ export default function LoadingScreen() {
 
   return (
     <Html fullscreen>
-      <div className="w-screen h-screen flex items-center justify-center bg-black select-none">
+      <div className="w-full h-svh flex items-center justify-center bg-black select-none">
         <div className="flex flex-col items-center space-x-5">
           <div
             className="

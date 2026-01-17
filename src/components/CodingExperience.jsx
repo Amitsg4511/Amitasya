@@ -72,12 +72,13 @@ Thoughtful, meaningful, beautiful software experiences`;
   return (
     <div
       ref={containerRef}
-      className="flex min-h-screen w-full items-center justify-center px-3"
+      className="flex min-h-svh w-full items-center justify-center px-5"
     >
       <div
         className=" font-googlecode
     text-cyan-300 font-medium leading-relaxed
-      text-sm sm:text-base lg:text-3xl
+ 
+      text-lg lg:text-3xl
 
       w-full
       max-w-full sm:max-w-[640px] lg:max-w-[900px]

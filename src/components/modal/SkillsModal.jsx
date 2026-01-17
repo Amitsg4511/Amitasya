@@ -44,7 +44,7 @@ export default function SkillsModal({ handleModalState, isDay }) {
           overflow-y-hidden`}
       >
         {/* Header */}
-        <div className="flex items-center justify-around px-5 py-3">
+        <div className="flex items-center justify-around px-3 py-3 md:px-5 md:py-3">
           <div className="bg-[#333030] px-9 py-2 rounded-3xl">
             <h2 className="text-xl md:text-5xl inset-0 font-semibold font-Sekuya text-[#50fef6] tracking-wide">
               Skills

@@ -38,7 +38,7 @@ export default function Experience() {
   }
   return (
     <div
-      className={`relative w-full h-dvh overflow-hidden ${
+      className={`relative w-full h-svh overflow-hidden ${
         isDay
           ? "bg-linear-to-r from-[#00f6fa] to-[#ff7a14]"
           : "bg-linear-to-r from-[#0f172a]  to-[#334155]"
