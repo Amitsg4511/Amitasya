@@ -34,7 +34,7 @@ export default function AboutMeModal({ handleModalState, isDay }) {
         ref={modalRef}
         className={` relative z-10
           w-[90%] sm:w-[85%] md:w-[70%] lg:w-[55%]
-          max-h-[85dvh]
+           h-[max-95svh] md:max-h-[95svh]
           ${isDay ? "bg-[#303034]/90" : "bg-zinc-900/90"}
           rounded-2xl
           border-4 border-[#ff7a14]
@@ -42,7 +42,7 @@ export default function AboutMeModal({ handleModalState, isDay }) {
       >
         <div className="flex items-center justify-around px-5 py-3">
           <div className="bg-[#333030] px-9 py-2 rounded-3xl">
-            <h2 className="text-[2rem] md:text-5xl inset-0 font-semibold font-Sekuya text-[#50fef6]">
+            <h2 className="[@media(width<380px)]:text-lg [@media(width>=380px)]:text-xl md:text-5xl inset-0 font-semibold font-Sekuya text-[#50fef6]">
               About Me
             </h2>
           </div>
@@ -64,7 +64,7 @@ export default function AboutMeModal({ handleModalState, isDay }) {
             <p
               className={`${
                 isDay ? "text-amber-100" : "text-white"
-              } font-merienda text-xl md:text-3xl`}
+              } font-merienda text-base leading-relaxed md:text-3xl`}
             >
               I’m a software developer who enjoys turning complex ideas into
               clean, intuitive digital experiences. My work sits at the
@@ -77,6 +77,24 @@ export default function AboutMeModal({ handleModalState, isDay }) {
               functional, but meaningful and enjoyable to use.
             </p>
           </section>
+          <div>
+            <h4 className="text-white text-xl font-science-gothic font-semibold uppercase">
+              Contact
+            </h4>
+            <p
+              className={`${
+                isDay ? "text-amber-100" : "text-white"
+              } font-merienda text-base font-semibold md:text-xl`}
+            >
+              Email:{" "}
+              <a
+                href="mailto:amitsg4511@zohomail.in"
+                className="underline hover:text-white"
+              >
+                amitsg4511@zohomail.in
+              </a>
+            </p>
+          </div>
         </div>
       </div>
     </div>

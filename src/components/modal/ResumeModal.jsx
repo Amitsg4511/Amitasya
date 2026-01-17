@@ -55,7 +55,7 @@ export default function ResumeModal({ handleModalState, isDay }) {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center  gap-2 shrink-0">
             {/* Download */}
             <a
               href={resume}
@@ -72,7 +72,8 @@ export default function ResumeModal({ handleModalState, isDay }) {
               hover:text-[#50fef6]
               hover:scale-125
               transition
-              text-sm sm:text-base
+              text-sm
+              md:text-xl
               whitespace-nowrap
             "
             >
@@ -86,6 +87,7 @@ export default function ResumeModal({ handleModalState, isDay }) {
               className="
               transition
               w-14 h-14
+              [@media(width<420px)]:w-11
               leading-none
               cursor-pointer
               hover:scale-125 

@@ -15,7 +15,7 @@ import { Navigate } from "react-router";
 function App() {
   gsap.registerPlugin(SplitText, ScrollTrigger, ScrambleTextPlugin, CustomEase);
   return (
-    <main className="h-full w-full">
+    <main className="h-svh w-full">
       <Routes>
         <Route path="/" element={<CodingExperience />} />
 

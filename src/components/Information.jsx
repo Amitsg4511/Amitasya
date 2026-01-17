@@ -56,13 +56,13 @@ function Information() {
   return (
     <div
       ref={containerRef}
-      className="relative h-full w-full flex lg:p-5 p-3"
+      className="relative h-svh w-full flex lg:p-5 p-3"
       style={{ clipPath: "polygon(51% 0, 51% 0%, 51% 100%, 51% 100%)" }}
     >
-      <div className="flex flex-col items-center-safe md:justify-center-safe w-full max-sm:mt-5      ">
+      <div className="flex flex-col items-center-safe md:justify-center-safe w-full max-sm:mt-5">
         <div
           ref={welcomeTextRef}
-          className="relative inline-block group uppercase md:bottom-9"
+          className="relative inline-block group md:bottom-9 max-sm:w-[90%] text-center"
         >
           <div
             aria-hidden
@@ -83,12 +83,12 @@ function Information() {
           </h1>
         </div>
 
-        <div className="lg:max-w-[51%] max-w-[95%] w-full justify-center items-center lg:mt-14 md:mt-9 mt-5 font-merienda lg:text-3xl text-xl p-3 lg:p-5">
+        <div className="lg:max-w-[51%] max-w-[95%] lg:mt-14 md:mt-9 mt-5 font-merienda lg:text-3xl md:text-2xl p-3 lg:p-5 leading-relaxed">
           <ScrambleText exploreExperienceRef={exploreExperienceRef} />
         </div>
         <div
           ref={exploreExperienceRef}
-          className="lg:mt-14 md:mt-11 mt-5 md:text-3xl text-xl text-white flex flex-col items-center"
+          className="lg:mt-14 md:mt-11 md:text-3xl text-xl text-white flex flex-col items-center"
         >
           <div className="max-sm:w-1/2 bottom-3 relative">
             <Button>Explore</Button>
@@ -98,8 +98,11 @@ function Information() {
               <span className="hidden md:inline text-xl">
                 Use mouse drag and scroll wheel to explore
               </span>
-              <span className="md:hidden">
-                Use one finger to rotate and Two fingers to zoom
+              <span className="md:hidden block">
+                Use one finger to rotate, two to zoom
+              </span>
+              <span className="md:hidden block mt-1">
+                For best experience, use desktop
               </span>
             </p>
           </div>
